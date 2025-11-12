@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
+(setq user-full-name "Frank Louw"
+       user-mail-address "fhlouw@outlook.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -40,9 +40,59 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/gtd/")
 
+;; Org agenda files
+(after! org
+  (setq org-agenda-files '("~/gtd/inbox.org"
+                           "~/gtd/projects.org"
+                           "~/gtd/areas.org"))
 
+  ;; GTD workflow states
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+
+  ;; GTD tags for contexts
+  (setq org-tag-alist '(("@work" . ?w)
+                        ("@home" . ?h)
+                        ("@computer" . ?c)
+                        ("@phone" . ?p)
+                        ("@errands" . ?e)))
+
+  ;; Capture templates
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file "~/gtd/inbox.org")
+           "* TODO %?\n  %U\n  %a\n")
+          ("n" "Note" entry (file "~/gtd/inbox.org")
+           "* %?\n  %U\n")
+          ("m" "Meeting" entry (file "~/gtd/inbox.org")
+           "* MEETING %?\n  %U\n")))
+
+  ;; Refile targets
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+  (setq org-refile-use-outline-path 'file)
+  (setq org-outline-path-complete-in-steps nil)
+
+  ;; Archive location
+  (setq org-archive-location "~/gtd/archive.org::* From %s")
+
+  ;; Custom agenda views
+  (setq org-agenda-custom-commands
+        '(("w" "Work tasks" tags-todo "@work"
+           ((org-agenda-overriding-header "Work Tasks")))
+          ("h" "Home tasks" tags-todo "@home"
+           ((org-agenda-overriding-header "Home Tasks")))
+          ("n" "Next actions" todo "NEXT"
+           ((org-agenda-overriding-header "Next Actions")))
+          ("W" "Waiting" todo "WAITING"
+           ((org-agenda-overriding-header "Waiting For"))))))
+;; Auto-save and auto-revert (important for git sync)
+(setq auto-save-default t
+      auto-save-interval 20)
+
+;; Auto-revert to pick up changes from other machines
+(global-auto-revert-mode t)
+(setq auto-revert-interval 5)
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
 ;;
