@@ -46,7 +46,12 @@
 (after! org
   (setq org-agenda-files '("~/gtd/inbox.org"
                            "~/gtd/projects.org"
-                           "~/gtd/areas.org"))
+                           "~/gtd/contacts.org"
+                           "~/gtd/someday_maybe.org",
+                           "~/gtd/next_actions.org"
+                           "~/gtd/agendas.org"
+                           "~/gtd/focus_and_direction.org"
+                           "~/gtd/reference.org"))
 
   ;; GTD workflow states
   (setq org-todo-keywords
